@@ -60,6 +60,13 @@
 <script>
   "use strict";
 
+  const nameInput = document.querySelector(".add-form-name");
+  const textInput = document.querySelector(".add-form-text");
+
+  const sanitizeHtml = (value) => {
+    return value.replaceAll("<", "").replaceAll(">", "");
+  }
+
   const comments = [
     {
       name: 'Глеб Фокин',
@@ -101,7 +108,8 @@
 
     const likeButtons = document.querySelectorAll('.like-button');
     likeButtons.forEach((button) => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
         const index = button.dataset.index;
         const currentComment = comments[index];
         if (currentComment.isLiked) {
@@ -113,13 +121,22 @@
         renderComments();
       });
     });
+
+    const commentsEllements = document.querySelectorAll('.comment');
+
+    commentsEllements.forEach((commentElement) => {
+      commentElement.addEventListener('click', () => {
+        const currentComment = comments[commentElement.dataset.index]
+        textInput.value = `${currentComment.name}:\n «${currentComment.text}»\n `;
+        textInput.focus();
+      });
+    });
+
   }
 
   renderComments();
 
   const btnEl = document.querySelector(".add-form-button");
-  const nameInput = document.querySelector(".add-form-name");
-  const textInput = document.querySelector(".add-form-text");
 
   function formatDate(date) { 
       const day = String(date.getDate()).padStart(2, '0'); 
@@ -136,9 +153,9 @@
     const nameError = document.getElementById('name-error');
     const commentError = document.getElementById('comment-error');
     const newComment = {
-      name: name,
+      name: sanitizeHtml(name),
       date: formatDate(new Date()),
-      text: text,
+      text: sanitizeHtml(text),
       likes: 0,
       isLiked: false,
     };
@@ -151,16 +168,17 @@
       return isValid = hasError ? false : true ;
     }
 
-    validate(name, nameInput, nameError);
-    validate(text, textInput, commentError);
+    let isValidName = validate(name, nameInput, nameError);
+    let isValidText = validate(text, textInput, commentError);
 
-    if (isValid) {
+    if (isValidName && isValidText) {
       comments.push(newComment);
-      renderComments();
       nameInput.value = '';
       textInput.value = '';
+      renderComments();
     }
   });
+  
 
 </script>
 
