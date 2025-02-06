@@ -1,0 +1,31 @@
+{
+  "name": "4-nd-course-hw",
+  "version": "1.0.0",
+  "description": "https://github.com/jimfoxes/4-nd-course-hw/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimfoxes/4-nd-course-hw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimfoxes/4-nd-course-hw/issues"
+  },
+  "homepage": "https://github.com/jimfoxes/4-nd-course-hw#readme",
+  "dependencies": {
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2"
+  }
+}
