@@ -1,5 +1,13 @@
 import { comments } from './comments.js'
 
+function delay(interval) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, interval);
+    });
+  }
+
 export const initLikeListeners = (renderComments) => {
     const likeButtons = document.querySelectorAll('.like-button')
     likeButtons.forEach((button) => {
@@ -7,13 +15,19 @@ export const initLikeListeners = (renderComments) => {
             event.stopPropagation()
             const index = button.dataset.index
             const currentComment = comments[index]
-            if (currentComment.isLiked) {
-                currentComment.likes--
-            } else {
-                currentComment.likes++
-            }
-            currentComment.isLiked = !currentComment.isLiked
-            renderComments()
+            currentComment.isLikeLoading = true;
+            renderComments();
+            
+            delay(2000).then(() => {
+                if (currentComment.isLiked) {
+                  currentComment.likes--;
+                } else {
+                  currentComment.likes++;
+                }
+                currentComment.isLiked = !currentComment.isLiked;
+                currentComment.isLikeLoading = false;
+                renderComments(); 
+            });
         })
     })
 }
