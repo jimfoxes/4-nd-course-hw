@@ -24,9 +24,14 @@ export const initAddCommentListener = (renderComments) => {
         let isValidText = validate(text, textInput, commentError)
 
         if (isValidName && isValidText) {
+            btnEl.style.display = 'none'
+            document.querySelector('.comment-posting').style.display = 'block'
             postComment(sanitizeHtml(text), sanitizeHtml(name)).then((data) => {
                 updateComments(data)
+
                 renderComments()
+                btnEl.style.display = 'flex'
+                document.querySelector('.comment-posting').style.display = 'none'
                 nameInput.value = ''
                 textInput.value = ''
             })

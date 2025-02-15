@@ -5,6 +5,7 @@ export const renderComments = () => {
 
     commentsList.innerHTML = comments
         .map((comment, index) => {
+          console.log(comment)
             return `<li class="comment" data-index="${index}"> 
                 <div class="comment-header"> 
                   <div>${comment.name}</div> 
@@ -16,10 +17,11 @@ export const renderComments = () => {
                 <div class="comment-footer"> 
                   <div class="likes"> 
                     <span class="likes-counter">${comment.likes}</span> 
-                    <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button> 
+                    <button class="like-button ${comment.isLiked ? '-active-like' : ''} ${comment.isLikeLoading ? '-loading-like' : ''}" data-index="${index}"></button> 
                   </div> 
                 </div>
               </li> `
+              
         })
         .join('')
 
