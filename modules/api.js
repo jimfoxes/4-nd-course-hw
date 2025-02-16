@@ -4,7 +4,12 @@ const host = 'https://wedev-api.sky.pro/api/v1/dmitriy-usynin'
 export const fetchComments = () => {
     return fetch(host + '/comments')
         .then((res) => {
-            return res.json()
+            if (res.status === 500) {
+                throw new Error('Ошибка сервера')
+            }
+            if (res.status === 200) {
+                return res.json()
+            }
         })
         .then((responseData) => {
             const appComments = responseData.comments.map((comment) => {

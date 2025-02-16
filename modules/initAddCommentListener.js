@@ -61,7 +61,7 @@ export const initAddCommentListener = (renderComments) => {
                             setTimeout(() => {
                                 postCommentWithRetry(text, name, retries - 1)
                             }, 1000)
-                        } else {
+                        } else if (error.message === 'Ошибка сервера' && retries === 0) {
                             alert('Ошибка при отправке комментария: Ошибка сервера')
                         }
 
