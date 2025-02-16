@@ -26,15 +26,61 @@ export const initAddCommentListener = (renderComments) => {
         if (isValidName && isValidText) {
             btnEl.style.display = 'none'
             document.querySelector('.comment-posting').style.display = 'block'
-            postComment(sanitizeHtml(text), sanitizeHtml(name)).then((data) => {
-                updateComments(data)
+            nameInput.disabled = true
+            textInput.disabled = true
+            const postCommentWithRetry = (text, name, retries = 3) => {
+                postComment(sanitizeHtml(text), sanitizeHtml(name))
+                    .then((data) => {
+                        updateComments(data)
 
-                renderComments()
-                btnEl.style.display = 'flex'
-                document.querySelector('.comment-posting').style.display = 'none'
-                nameInput.value = ''
-                textInput.value = ''
-            })
+                        renderComments()
+                        btnEl.style.display = 'flex'
+                        document.querySelector(
+                            '.comment-posting'
+                        ).style.display = 'none'
+                        nameInput.disabled = false
+                        textInput.disabled = false
+                        nameInput.value = ''
+                        textInput.value = ''
+                    })
+                    .catch((error) => {
+                        btnEl.style.display = 'flex'
+                        document.querySelector('.comment-posting').style.display = 'none'
+                        nameInput.disabled = false
+                        textInput.disabled = false
+
+                        if (error.message === 'Failed to fetch') {
+                            alert('Нет интернета, попробуйте снова')
+                        }
+
+                        if (error.message === 'Ошибка сервера' && retries > 0) {
+                            console.log(
+                                `Ошибка 500. Повторная попытка... Осталось попыток: ${retries}`
+                            )
+
+                            setTimeout(() => {
+                                postCommentWithRetry(text, name, retries - 1)
+                            }, 1000)
+                        } else if (error.message === 'Ошибка сервера' && retries === 0) {
+                            alert('Ошибка при отправке комментария: Ошибка сервера')
+                        }
+
+                        if (error.message === 'Неверный запрос') {
+                            alert(
+                                'Имя и комментарий должны быть не менее трёх символов'
+                            )
+
+                            nameInput.classList.add('error')
+                            textInput.classList.add('error')
+
+                            setTimeout(() => {
+                                nameInput.classList.remove('error')
+                                textInput.classList.remove('error')
+                            }, 2000)
+                        }
+                    })
+            }
+            postCommentWithRetry(text, name)
         }
     })
 }

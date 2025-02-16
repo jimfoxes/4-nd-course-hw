@@ -4,8 +4,7 @@ export const renderComments = () => {
     const commentsList = document.querySelector('.comments')
 
     commentsList.innerHTML = comments
-        .map((comment, index) => {
-          console.log(comment)
+        .map((comment, index) => {          
             return `<li class="comment" data-index="${index}"> 
                 <div class="comment-header"> 
                   <div>${comment.name}</div> 
