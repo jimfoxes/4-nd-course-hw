@@ -1,11 +1,14 @@
 import { renderComments } from './modules/renderComments.js'
-import { initAddCommentListener } from './modules/initAddCommentListener.js'
 import { fetchComments } from './modules/api.js'
 import { updateComments } from './modules/comments.js'
 
-document.querySelector('.comments').innerHTML =
-    'Пожалуйста подождите, загружаю комментарии...'
-const fetchCommentWithRetry = (retries = 3) => {
+export const fetchCommentWithRetry = (isFirstLoading, retries = 3) => {
+
+    if (isFirstLoading) {
+        document.querySelector('.container').innerHTML =
+            `<p>Пожалуйста подождите, загружаю комментарии...</p>`
+    }
+
     fetchComments()
         .then((data) => {
             updateComments(data)
@@ -29,6 +32,6 @@ const fetchCommentWithRetry = (retries = 3) => {
             }
         })
 }
-fetchCommentWithRetry()
+fetchCommentWithRetry(true)
 
-initAddCommentListener(renderComments)
+
