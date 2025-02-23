@@ -34,8 +34,8 @@ export const renderRegistration = () => {
         registration(nameEl.value, loginEl.value, passwordEl.value).then((response) => {
             return response.json()
         }).then((data) => {
-            setToken(data.user.token)
-            setName(data.user.name)
+            setToken('token', data.user.token)
+            setName('name', data.user.name)
             fetchCommentWithRetry()
         })
 

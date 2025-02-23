@@ -3,16 +3,22 @@ import { formatDate } from './formatDate.js'
 const host = 'https://wedev-api.sky.pro/api/v2/dmitriy-usynin'
 const authHost = 'https://wedev-api.sky.pro/api/user'
 
-export let token = ''
+export let token = localStorage.getItem('token')
 
-export const setToken = (newToken) => {
-    token = newToken
+export const setToken = (nameStorage, newToken) => {
+    localStorage.setItem(nameStorage, newToken)
+    token = localStorage.getItem('token')
 }
 
-export let name = ''
+export const clearToken = () => {
+    token = ''
+}
 
-export const setName = (newName) => {
-    name = newName
+export let name = localStorage.getItem('name')
+
+export const setName = (nameStorage, newName) => {
+    localStorage.setItem(nameStorage, newName)
+    name = localStorage.getItem('name')
 }
 
 export const fetchComments = () => {

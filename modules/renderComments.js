@@ -1,6 +1,10 @@
+import { fetchCommentWithRetry } from '../index.js'
 import { comments } from './comments.js'
-import { name, token } from './api.js'
-import { initLikeListeners, initReplyListeners, } from './initCommentListeners.js'
+import { name, token, clearToken } from './api.js'
+import {
+    initLikeListeners,
+    initReplyListeners,
+} from './initCommentListeners.js'
 import { renderLogin } from './renderLogin.js'
 import { initAddCommentListener } from './initAddCommentListener.js'
 export const renderComments = () => {
@@ -36,7 +40,11 @@ export const renderComments = () => {
         <button class="add-form-button">Написать</button>
         <div class="comment-posting">Добавляется...</div>
       </div>
-    </div>`
+    </div>
+    <u class="add-form-button-link log-out">
+    Выйти
+    </u>
+    `
 
     const linkToLoginText = `<p>чтобы отправить комментарий, <span
     class="link-login">войдите</span></p>`
@@ -57,4 +65,10 @@ export const renderComments = () => {
             renderLogin()
         })
     }
+
+    document.querySelector('.log-out').addEventListener('click', () => {
+        localStorage.clear()
+        clearToken()
+        fetchCommentWithRetry()
+    })
 }
