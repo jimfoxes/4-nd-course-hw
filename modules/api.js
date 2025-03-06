@@ -1,6 +1,26 @@
 import { formatDate } from './formatDate.js'
 
-const host = 'https://wedev-api.sky.pro/api/v1/dmitriy-usynin'
+const host = 'https://wedev-api.sky.pro/api/v2/dmitriy-usynin'
+const authHost = 'https://wedev-api.sky.pro/api/user'
+
+export let token = localStorage.getItem('token')
+
+export const setToken = (nameStorage, newToken) => {
+    localStorage.setItem(nameStorage, newToken)
+    token = localStorage.getItem('token')
+}
+
+export const clearToken = () => {
+    token = ''
+}
+
+export let name = localStorage.getItem('name')
+
+export const setName = (nameStorage, newName) => {
+    localStorage.setItem(nameStorage, newName)
+    name = localStorage.getItem('name')
+}
+
 export const fetchComments = () => {
     return fetch(host + '/comments')
         .then((res) => {
@@ -29,10 +49,12 @@ export const fetchComments = () => {
 export const postComment = (text, name) => {
     return fetch(host + '/comments', {
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
             text,
             name,
-            forceError: true,
         }),
     }).then((response) => {
         if (response.status === 500) {
@@ -49,3 +71,23 @@ export const postComment = (text, name) => {
     })
 }
 
+export const login = (login, password) => {
+    return fetch(authHost + '/login', {
+        method: 'POST',
+        body: JSON.stringify({
+            login: login,
+            password: password,
+        }),
+    })
+}
+
+export const registration = (name, login, password) => {
+    return fetch(authHost, {
+        method: 'POST',
+        body: JSON.stringify({
+            name: name,
+            login: login,
+            password: password,
+        }),
+    })
+}
